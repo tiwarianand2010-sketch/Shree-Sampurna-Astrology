@@ -10,7 +10,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout Code
+      uses: actions/checkout@v4
 
     - name: Set up Java
       uses: actions/setup-java@v4
@@ -23,6 +24,18 @@ jobs:
       with:
         flutter-version: '3.19.x'
         channel: 'stable'
+
+    - name: Store main.dart and pubspec.yaml
+      run: |
+        mkdir -p ../user_code
+        cp lib/main.dart ../user_code/main.dart
+        cp pubspec.yaml ../user_code/pubspec.yaml
+
+    - name: Generate Full Android Project Automatically
+      run: |
+        flutter create --org com.example shree_sampurna_astrology --template=app .
+        cp ../user_code/main.dart lib/main.dart
+        cp ../user_code/pubspec.yaml pubspec.yaml
 
     - name: Get Dependencies
       run: flutter pub get
